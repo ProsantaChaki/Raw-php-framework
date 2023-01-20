@@ -43,22 +43,10 @@ class Inventory extends BaseModel
         return $inventories;
     }
     
-    /**
-     * Get last user
-     *
-     * @return mixed
-     */
-    public static function last()
-    {
-        $sql = "select * from " . self::$table_name . " order by id desc";
 
-        $users = DB::query($sql)->first();
-
-        return $users;
-    }
 
     /**
-     * Create a user
+     * Create a inventory
      *
      * @param object $data
      * @return mixed
@@ -67,7 +55,7 @@ class Inventory extends BaseModel
     {
         $sql = "insert into " . self::$table_name . " set item_id=:item_id, type=:type, amount=:amount,  created_at=NOW(), updated_at=NOW()";
 
-        return DB::query($sql, $data)->run();
+        return DB::query($sql)->run();
     }
 
     /**
@@ -75,7 +63,27 @@ class Inventory extends BaseModel
      *
      * @return int
      */
-    public static function update()
+    public static function update($id, $data)
     {
+        $update_data='';
+        foreach ($data as $key => $value){
+            if($update_data!='') $update_data = $update_data.', ';
+            $update_data = $update_data . "'{$key}'= {$value}";
+        }
+        $sql = "update " . self::$table_name . "  SET {$update_data} WHERE item_id='{$id}'";
+        return DB::query($sql,$data)->run();
+    }
+
+    public static function getSingle( $data)
+    {
+        $condition_data='';
+        foreach ($data as $key => $value){
+            if($condition_data!='') $condition_data = $condition_data.' and ';
+            $condition_data = $condition_data . "{$key}= '{$value}'";
+        }
+        $sql = "select * from " . self::$table_name . " where {$condition_data}" ;
+
+        $inventory = DB::query($sql)->first();
+        return $inventory;
     }
 }

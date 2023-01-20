@@ -15,9 +15,9 @@ class InventoryRepository
         if (!$itemData){
             return Inventory::create($item);
         }else{
-            $amount =$item['amount']+$itemData['amount'];
-            Inventory::update($itemData['id'],['amount'=>$amount] );
-            return $this->getSingle([['item_id',$item['item_id']],['type',$item['type']]]);
+            $amount =$item['amount']+$itemData->amount;
+            Inventory::update($itemData->id,['amount'=>$amount] );
+            return Inventory::getSingle(['item_id'=>$item['item_id'],'type'=>$item['type']]);
         }
     }
 
