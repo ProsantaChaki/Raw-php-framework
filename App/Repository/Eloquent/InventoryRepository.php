@@ -10,17 +10,15 @@ use App\Models\User;
 class InventoryRepository
 {
     public function insertOrUpdate($item){
-        $itemData = array();
-        $itemData[] = Inventory::find(Params::get('id'));
 
-        /*$itemData = $this->getSingle([['item_id',$item['item_id']]]);
+        $itemData = Inventory::find($item['item_id']);
         if (!$itemData){
-            return $this->create($item);
+            return Inventory::create($item);
         }else{
             $amount =$item['amount']+$itemData['amount'];
-            $this->update($itemData['id'],['amount'=>$amount] );
+            Inventory::update($itemData['id'],['amount'=>$amount] );
             return $this->getSingle([['item_id',$item['item_id']],['type',$item['type']]]);
-        }*/
+        }
     }
 
     public function updateInventory($item){

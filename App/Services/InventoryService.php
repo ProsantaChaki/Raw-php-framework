@@ -21,18 +21,15 @@ class InventoryService
     public function addItem($item)
     {
         try {
-            DB::beginTransaction();
             $data = $this->inventoryRepository->insertOrUpdate([
                 'item_id' => $item['item_id'],
                 'type' => $item['type'],
                 'amount' => $item['amount']
             ]);
-            DB::commit();
-            return ['status' => 'Success', 'data' => $data];
+            return json_encode(['status' => 'Success', 'data' => $data]);
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
-            DB::rollBack();
-            logger($exception->getMessage());
+            return $exception->getMessage();
+            //logger($exception->getMessage());
         }
 
     }

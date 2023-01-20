@@ -22,10 +22,9 @@ class Inventory extends BaseModel
      */
     public static function find($id)
     {
-        $sql = "select * from " . self::$table_name . " where id = " . $id;
 
+        $sql = "select * from " . self::$table_name . " where item_id = '{$id}'" ;
         $inventory = DB::query($sql)->first();
-
         return $inventory;
     }
 
@@ -66,7 +65,7 @@ class Inventory extends BaseModel
      */
     public static function create($data)
     {
-        $sql = "insert into " . self::$table_name . " set first_name=:first_name, last_name=:last_name, email=:email, age=:age, country=:country, created_at=NOW(), updated_at=NOW()";
+        $sql = "insert into " . self::$table_name . " set item_id=:item_id, type=:type, amount=:amount,  created_at=NOW(), updated_at=NOW()";
 
         return DB::query($sql, $data)->run();
     }
@@ -76,8 +75,7 @@ class Inventory extends BaseModel
      *
      * @return int
      */
-    public static function insertedId()
+    public static function update()
     {
-        return DB::insertedId();
     }
 }
