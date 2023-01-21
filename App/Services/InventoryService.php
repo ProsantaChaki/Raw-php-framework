@@ -37,30 +37,24 @@ class InventoryService
     public function removeItem($item)
     {
         try {
-            DB::beginTransaction();
             $data = $this->inventoryRepository->updateInventory([
                 'item_id' => $item['item_id'],
                 'amount' => $item['amount']
             ]);
-            DB::commit();
-            return ['status' => 'Success', 'data' => $data];
+            return json_encode(['status' => 'Success', 'data' => $data]);
         } catch (\Exception $exception) {
-            DB::rollBack();
-            logger($exception->getMessage());
+            return $exception->getMessage();
         }
     }
 
-    public function getItem($item_id)
+    public function getItem($item)
     {
         try {
-            DB::beginTransaction();
-            $data = $this->inventoryRepository->getSingle([
-                'item_id' => $item_id
-            ]);
-            return ['status' => 'Success', 'data' => $data];
+            $data = $this->inventoryRepository->getInventory('food');
+            return json_encode(['status' => 'Success', 'data' => $data]);
         } catch (\Exception $exception) {
-            DB::rollBack();
-            logger($exception->getMessage());
+            return $exception->getMessage();
+            //logger($exception->getMessage());
         }
     }
 

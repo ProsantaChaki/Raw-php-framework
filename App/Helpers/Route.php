@@ -126,11 +126,12 @@ class Route
                 die();
             } else {
                 $actions = explode('@', $desired_route->action);
+
     
                 $class = '\\App\\Controllers\\' . $actions[0];
     
                 $obj = new $class();
-                echo call_user_func(array($obj, $actions[1]));
+                echo call_user_func(array($obj, $actions[1]),Params::all());
             }
 
         } else {

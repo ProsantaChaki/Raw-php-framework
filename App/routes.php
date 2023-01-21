@@ -8,4 +8,4 @@ use App\Helpers\Route;
 Route::get('/', 'InventoryController@index');
 Route::post('/add-item', 'InventoryController@addItem');
 Route::post('/remove-item', 'InventoryController@removeItem');
-Route::get('/get-item', 'InventoryController@getStock');
+Route::get('/get-item/{type}', 'InventoryController@getStock');

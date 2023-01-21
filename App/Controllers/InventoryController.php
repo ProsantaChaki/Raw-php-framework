@@ -22,17 +22,17 @@ class InventoryController
         return json_encode($inventories);
     }
 
-    private function validation(){
+    private function validation($type){
         if(isset($_POST['item_id']) && (trim($_POST['item_id']) != '') ) {
             $request['item_id']=$_POST['item_id'];
         }
         else {
-            $errors[] = "Please give a name";
+            $errors[] = "Please give a Item_id";
         }
         if(isset($_POST['type']) && (trim($_POST['type']) != '') ) {
             $request['type']=$_POST['type'];
         }
-        else {
+        else if($type == 'insert'){
             $errors[] = "Please give a type";
         }
         if(isset($_POST['amount']) && (intval(trim($_POST['amount'])) > 0) ) {
@@ -53,18 +53,22 @@ class InventoryController
 
     }
 
-    public function getStock(){
-        echo '$item_id';
-        return $this->getItem('$item_id');
+    public function getStock($data){
+        return $this->inventoryServices->getItem($data);
     }
+
     public function addItem(){
-        $validation = $this->validation();
+        $validation = $this->validation('insert');
         if(!$validation['status']) {
             return json_encode($validation);
         }
         return $this->inventoryServices->addItem($validation['data']);
     }
-    public function removeItem(  $request){
-        //return $this->removeItem($request->all());
+    public function removeItem(){
+        $validation = $this->validation('delete');
+        if(!$validation['status']) {
+            return json_encode($validation);
+        }
+        return $this->inventoryServices->removeItem($validation['data']);
     }
 }

@@ -14,12 +14,6 @@ class Inventory extends BaseModel
      */
     private static $table_name = "inventories";
 
-    /**
-     * Get single user
-     *
-     * @param int $id
-     * @return mixed
-     */
     public static function find($id)
     {
 
@@ -28,50 +22,30 @@ class Inventory extends BaseModel
         return $inventory;
     }
 
-    /**
-     * Get all users
-     *
-     * @return mixed
-     */
-    public static function getAll()
+    public static function getAmountByType($type)
     {
-        echo "get all";
-        $sql = "select * from " . self::$table_name;
-
+        $sql ="SELECT SUM(amount) as amount, type FROM ". self::$table_name . " WHERE type = '{$type}'" ;
+        //echo $sql;
         $inventories = DB::query($sql)->get();
 
         return $inventories;
     }
-    
 
-
-    /**
-     * Create a inventory
-     *
-     * @param object $data
-     * @return mixed
-     */
     public static function create($data)
     {
         $sql = "insert into " . self::$table_name . " set item_id=:item_id, type=:type, amount=:amount,  created_at=NOW(), updated_at=NOW()";
-
-        return DB::query($sql)->run();
+        return DB::query($sql, $data)->run();
     }
 
-    /**
-     * Get last inserted user ID
-     *
-     * @return int
-     */
     public static function update($id, $data)
     {
         $update_data='';
         foreach ($data as $key => $value){
             if($update_data!='') $update_data = $update_data.', ';
-            $update_data = $update_data . "'{$key}'= {$value}";
+            $update_data = $update_data . "{$key}= {$value}";
         }
-        $sql = "update " . self::$table_name . "  SET {$update_data} WHERE item_id='{$id}'";
-        return DB::query($sql,$data)->run();
+        $sql = "update " . self::$table_name . "  SET {$update_data} WHERE id={$id}";
+        return DB::query($sql)->run();
     }
 
     public static function getSingle( $data)
